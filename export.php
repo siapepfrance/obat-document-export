@@ -11,8 +11,6 @@
         "X-Requested-With" => $_ENV['X_Requested_With']
     );
 
-    var_dump($baseHeaders);
-
     function getClient($headers)
     {
         return new \GuzzleHttp\Client([
@@ -72,7 +70,7 @@
             $documentRequest = downloadDocument($baseHeaders, $fileId, $format);
             $contentAsString = $documentRequest ? $documentRequest->getContents() : null;
             if($contentAsString) {
-                file_put_contents(sprintf('./export/%s', $rowName), $contentAsString);
+                file_put_contents(sprintf('./exports/%s', $rowName), $contentAsString);
             }
         }
     }

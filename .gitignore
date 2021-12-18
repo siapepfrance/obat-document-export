@@ -1,6 +1,6 @@
 /vendor/
-/exports/
-!/exports/.gitkeep
+/exports/*
+!/**/.gitkeep
 /.env
 /.idea
 /.vcs

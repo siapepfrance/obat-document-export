@@ -29,13 +29,4 @@ php -S 127.0.0.1:8001 export.php
 ```
 
 #### 5 - Open your browser
-Open this URL in your browser and wait until you see it is written "All exports are done" 127.0.0.1:8001
-
-
-Resources
----------
-
- * [Contributing](https://symfony.com/doc/current/contributing/index.html)
- * [Report issues](https://github.com/symfony/symfony/issues) and
-   [send Pull Requests](https://github.com/symfony/symfony/pulls)
-   in the [main Symfony repository](https://github.com/symfony/symfony)
+Open the URL http://127.0.0.1:8001 in your browser and wait until you see it is written "All exports are done"

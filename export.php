@@ -19,18 +19,6 @@
         ]);
     }
 
-    function loadQuotations($baseHeaders, $rowNumber = 1) {
-        $client = getClient(array_merge($baseHeaders, ['Content-Type' => 'application/x-www-form-urlencoded']));
-        return $client->request('POST', '/app/quotes/load', [
-            'form_params' => [
-                'length' => $rowNumber,
-                'order[0][dir]' => 'asc',
-                'order[0][column]' => 3,
-                'start' => 0
-            ]
-        ])->getBody();
-    }
-
     function loadDocuments($baseHeaders, $path, $rowNumber = 1) {
         $client = getClient(array_merge($baseHeaders, ['Content-Type' => 'application/x-www-form-urlencoded']));
         return $client->request('POST', $path, [
@@ -65,7 +53,7 @@
             $rowName = sprintf('Export_%s_%s_%s_OBAT.%s', $fileName, $rowReferenceFormatted, $nowFormatted, $format);
             $index = ($key + 1);
 
-            echo sprintf('%s / %s %s n°%s chargé (export id => %s, fichier => %s) ! <br/><br/>', $index, $rowCount, $fileName, $rowReference, $fileId, $rowName);
+            echo sprintf('%s / %s %s n°%s loaded (export id => %s, file => %s) ! <br/><br/>', $index, $rowCount, $fileName, $rowReference, $fileId, $rowName);
 
             $documentRequest = downloadDocument($baseHeaders, $fileId, $format);
             $contentAsString = $documentRequest ? $documentRequest->getContents() : null;

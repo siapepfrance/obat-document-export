@@ -1,5 +1,6 @@
 /vendor/
 /exports/*
+exports.zip
 !/**/.gitkeep
 /.env
 /.idea

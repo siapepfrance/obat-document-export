@@ -19,15 +19,19 @@
         ]);
     }
 
-    function loadDocuments($baseHeaders, $path, $rowNumber = 1) {
+    function loadDocuments($baseHeaders, $path, $rowNumber = 1, $status = null) {
         $client = getClient(array_merge($baseHeaders, ['Content-Type' => 'application/x-www-form-urlencoded']));
+        $params = [
+            'length' => $rowNumber,
+            'order[0][dir]' => 'asc',
+            'order[0][column]' => 3,
+            'start' => 0
+        ];
+        if ($status != null) {
+            $params = array_merge($params, ['filters[status]' => $status]);
+        }
         return $client->request('POST', $path, [
-            'form_params' => [
-                'length' => $rowNumber,
-                'order[0][dir]' => 'asc',
-                'order[0][column]' => 3,
-                'start' => 0
-            ]
+            'form_params' => $params
         ])->getBody();
     }
 
@@ -64,18 +68,24 @@
     }
 
     function executeQuotationExport($baseHeaders, $format = 'xlsx') {
-        $result = loadDocuments($baseHeaders, '/app/quotes/load', $_ENV['MaxRecord']);
-        executeExport($baseHeaders, 'Devis', $result, $format);
+        $mainResults = loadDocuments($baseHeaders, '/app/quotes/load', $_ENV['MaxRecord'], null);
+        $cancelledResults = loadDocuments($baseHeaders, '/app/quotes/load', $_ENV['MaxRecord'], 'cancelled');
+        executeExport($baseHeaders, 'Devis', $mainResults, $format);
+        executeExport($baseHeaders, 'Devis', $cancelledResults, $format);
     }
 
     function executeInvoiceExport($baseHeaders, $format = 'xlsx') {
-        $result = loadDocuments($baseHeaders, '/app/invoices/load', $_ENV['MaxRecord']);
-        executeExport($baseHeaders, 'Facture', $result, $format);
+        $mainResults = loadDocuments($baseHeaders, '/app/invoices/load', $_ENV['MaxRecord']);
+        $cancelledResults = loadDocuments($baseHeaders, '/app/invoices/load', $_ENV['MaxRecord'], 'cancelled');
+        executeExport($baseHeaders, 'Facture', $mainResults, $format);
+        executeExport($baseHeaders, 'Facture', $cancelledResults, $format);
     }
 
     function executeCreditExport($baseHeaders, $format = 'xlsx') {
-        $result = loadDocuments($baseHeaders, '/app/credits/load', $_ENV['MaxRecord']);
-        executeExport($baseHeaders, 'Avoir', $result, $format);
+        $mainResults = loadDocuments($baseHeaders, '/app/credits/load', $_ENV['MaxRecord']);
+        $cancelledResults = loadDocuments($baseHeaders, '/app/credits/load', $_ENV['MaxRecord'], 'cancelled');
+        executeExport($baseHeaders, 'Avoir', $mainResults, $format);
+        executeExport($baseHeaders, 'Avoir', $cancelledResults, $format);
     }
 
     executeCreditExport($baseHeaders, 'xlsx');
